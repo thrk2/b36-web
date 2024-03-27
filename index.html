@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex, noarchive">
+    <title>B36 Image Viewer</title>
+    <style>
+        #title {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 2em;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+        }
+        #text {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 1em;
+            font-family: Arial, sans-serif;
+        }
+        #imageContainer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        #currentImage {
+            width: 1000px;
+            height: auto;
+        }
+        #prev {
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.5em;
+            font-family: Arial, sans-serif;
+        }
+        #next {
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 2em;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="title">B36 construction cam</div>
+    <div id="text">Picture taken once a day (if battery allows).</div>
+    <div id="imageContainer">
+        <span id="prev">◀︎</span>
+        <img id="currentImage" src="" alt="Image">
+        <span id="next">▶︎</span>
+    </div>
+    <script>
+        let currentIndex = 0;
+        let images = [];
+
+        fetch('pics/names.txt')
+            .then(response => response.text())
+            .then(data => {
+                images = data.split('\n');
+                updateImage();
+            })
+            .catch(error => console.error('An error occurred:', error));
+
+        document.getElementById('prev').addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            updateImage();
+        });
+
+        document.getElementById('next').addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % images.length;
+            updateImage();
+        });
+
+        function updateImage() {
+            document.getElementById('currentImage').src = 'pics/' + images[currentIndex];
+        }
+    </script>
+</body>
+</html>
